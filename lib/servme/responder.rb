@@ -39,7 +39,7 @@ module Servme
     end
 
     def format_response(response)
-      body = json?(response) ? JSON::dump(response[:data]) : response[:data]
+      body = json?(response) ? (JSON::dump(response[:data]) rescue []) : response[:data]
       [response[:status_code], response[:headers], body]
     end
 
@@ -67,7 +67,7 @@ module Servme
     def process_json_request(request)
       request_params = request.params rescue nil
       if request_params && request_params.empty? && request.env && request.env['CONTENT_TYPE'] =~ /application\/json/
-        parsed_json = JSON.parse(request.body.read)
+        parsed_json = request.body.length > 2 ? JSON.parse(request.body.read) : {}
         parsed_json.each do |k,v|
           request.params[k] = v
         end
