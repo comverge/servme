@@ -52,13 +52,13 @@ module Servme
     def print_diff(req, method)
       methods = @stubbings[req.path]
       if methods.nil?
-        puts "Unexpected path #{req.path}"
+        puts "\nUnexpected path #{req.path}\n\n"
         return
       end
 
       paramPairs = methods[method]
       if paramPairs.nil?
-        puts "Path #{req.path} with unexpected method #{method}"
+        puts "\nPath #{req.path} with unexpected method #{method}\n\n"
         return
       end
 
@@ -71,7 +71,7 @@ module Servme
         exp_params_array = exp_params.to_a
         diff = exp_params_array - actual_params_array
         act_diff = actual_params_array - exp_params_array
-        puts "Params expected diff: #{Hash[diff]}\nParams actual diff: #{Hash[act_diff]}\n\n"
+        puts "\n\n #{req.path}:#{method} params expected diff: #{Hash[diff]}\nParams actual diff: #{Hash[act_diff]}\n\n"
       end
     end
 
