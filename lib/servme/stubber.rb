@@ -40,9 +40,12 @@ module Servme
     def stub_for_request(req)
       method = req.request_method.downcase.to_sym
       begin
-        stub = @stubbings[req.path][method][req.params]
-        debugger if method == :delete
-        print_diff(req, method) if stub.nil?
+        path = @stubbings[req.path] || {}
+        methods = path[method] || {}
+        stub = methods[req.params]
+        if stub.nil? && req.path !~ /\.(gif|png|ico|css|js)$/ && !(req.path == "/")
+          print_diff(req, method)
+        end
         stub
       rescue NoMethodError
         nil
