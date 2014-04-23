@@ -43,7 +43,7 @@ module Servme
         path = @stubbings[req.path] || {}
         methods = path[method] || {}
         stub = methods[req.params]
-        if stub.nil? && req.path !~ /\.(gif|png|ico|css|js)$/ && !(req.path == "/")
+        if stub.nil? && req.path !~ /\.(woff|gif|png|ico|css|js)$/ && !(req.path == "/")
           print_diff(req, method)
         end
         stub
@@ -61,7 +61,7 @@ module Servme
 
       paramPairs = methods[method]
       if paramPairs.nil?
-        puts "\nPath #{req.path} with unexpected method #{method}\n\n"
+        puts "\nUnexpected method #{method} for path #{req.path}\n\n"
         return
       end
 
