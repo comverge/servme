@@ -43,6 +43,11 @@ module Servme
         path = @stubbings[req.path] || {}
         methods = path[method] || {}
         stub = methods[req.params]
+
+        if req.path == "/api_users/sign_out"
+          return methods[{}]
+        end
+
         if stub.nil? && req.path !~ /\.(woff|gif|png|ico|css|js)$/ && !(req.path == "/")
           print_diff(req, method)
         end
