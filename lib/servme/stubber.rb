@@ -42,6 +42,9 @@ module Servme
       begin
         path = @stubbings[req.path] || {}
         methods = path[method] || {}
+        # we pass the undescore param to prevent caching the header, however,
+        # we have to remove the underscore, otherwise it breaks everything
+        req.params.delete("_")
         stub = methods[req.params]
 
         if req.path == "/api_users/sign_out"
