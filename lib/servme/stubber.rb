@@ -45,7 +45,7 @@ module Servme
         # we pass the undescore param to prevent caching the header, however,
         # we have to remove the underscore, otherwise it breaks everything
         req.params.delete("_")
-        stub = methods[req.params]
+        stub = methods[req.params] || methods[stringify_keys(req.params)]
 
         if req.path == "/api_users/sign_out"
           return methods[{}]
