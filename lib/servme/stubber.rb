@@ -4,6 +4,8 @@ module Servme
   class Stubber
     include Singleton
 
+    attr_accessor :stubbings
+
     def initialize
       @stubbings = {}
     end
@@ -23,6 +25,8 @@ module Servme
           }
         end
       end
+
+      Logger.instance.init_stub(config[:url], @stubbings)
     end
 
     def get_headers(config)

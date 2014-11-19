@@ -22,6 +22,7 @@ module Servme
   end
 
   def self.reset
+    Logger.instance.alert_reset
     Service.clear
   end
 

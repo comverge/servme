@@ -17,6 +17,10 @@ module Servme
       @options = DEFAULT_OPTIONS.merge(opts.reject { |k,v| v.nil? })
     end
 
+    def logger
+      Logger.instance
+    end
+
     def stubber
       Stubber.instance
     end
@@ -27,7 +31,7 @@ module Servme
 
       static_file = File.join(options[:static_file_root_path], relative_path_on_disk)
       stub = stubber.stub_for_request(request)
-      if (stub)
+      response = if stub && !stub.empty?
         format_response(stub)
       elsif(request.path == '/')
         sinatra_app.send_file("#{options[:static_file_root_path]}/index.html")
@@ -36,6 +40,9 @@ module Servme
       else
         format_response(default_response(request))
       end
+
+      logger.request_response_pair(request, response)
+      response
     end
 
     def format_response(response)
