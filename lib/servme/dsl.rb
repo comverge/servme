@@ -26,4 +26,15 @@ module Servme
     Service.clear
   end
 
+  def self.paths(show_responses = false)
+    if show_responses
+      Stubber.instance.stubbings
+    else
+      Stubber.instance.stubbings.keys
+    end
+  end
+
+  def self.stubs_for_url(url)
+    Stubber.instance.stubbings[url]
+  end
 end
