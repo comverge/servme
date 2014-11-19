@@ -1,5 +1,8 @@
+require 'servme/configuration'
+require 'servme/logger'
 require 'servme/version'
 require 'servme/stubber'
+require 'servme/stub_filter'
 require 'servme/responder'
 require 'servme/service'
 require 'servme/service_stubbing'
