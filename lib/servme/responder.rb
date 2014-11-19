@@ -25,12 +25,16 @@ module Servme
       Stubber.instance
     end
 
+    def stub_filter
+      StubFilter.new(stubber.stubbings)
+    end
+
     def respond(request)
       process_json_request(request)
       relative_path_on_disk = request.path.sub(options[:static_file_vdir], '')
 
       static_file = File.join(options[:static_file_root_path], relative_path_on_disk)
-      stub = stubber.stub_for_request(request)
+      stub = stub_filter.for_request(request)
       response = if stub && !stub.empty?
         format_response(stub)
       elsif(request.path == '/')
@@ -55,16 +59,17 @@ module Servme
     end
 
     def default_response(request)
+      request_params = {
+        :method => request.request_method.downcase.to_sym, #FIXME: duplication -- stubber.rb
+        :params => request.params,
+        :path => request.path
+      }
       {
         :headers => DEFAULT_HEADERS,
         :status_code => 404,
         :data => {
           :error => "Servme doesn't know how to respond to this request",
-          :request => {
-            :method => request.request_method.downcase.to_sym, #FIXME: duplication -- stubber.rb
-            :params => request.params,
-            :path => request.path
-          }
+          :request => request_params
         }
       }
     end

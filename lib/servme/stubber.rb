@@ -7,7 +7,7 @@ module Servme
     attr_accessor :stubbings
 
     def initialize
-      @stubbings = {}
+      clear
     end
 
     def clear
@@ -29,6 +29,8 @@ module Servme
       Logger.instance.init_stub(config[:url], @stubbings)
     end
 
+    private
+
     def get_headers(config)
       response = config[:response]
 
@@ -39,55 +41,6 @@ module Servme
       headers.merge!(config[:headers] || {})
 
       Responder::DEFAULT_HEADERS.merge(headers)
-    end
-
-    def stub_for_request(req)
-      method = req.request_method.downcase.to_sym
-      begin
-        path = @stubbings[req.path] || {}
-        methods = path[method] || {}
-        # we pass the undescore param to prevent caching the header, however,
-        # we have to remove the underscore, otherwise it breaks everything
-        req.params.delete("_")
-        stub = methods[req.params] || methods[stringify_keys(req.params)]
-
-        if req.path == "/api_users/sign_out"
-          return methods[{}]
-        end
-
-        if stub.nil? && req.path !~ /\.(woff|gif|png|ico|css|js)$/ && !(req.path == "/")
-          print_diff(req, method)
-        end
-        stub
-      rescue NoMethodError
-        nil
-      end
-    end
-
-    def print_diff(req, method)
-      methods = @stubbings[req.path]
-      if methods.nil?
-        puts "\nUnexpected path #{req.path}\n\n"
-        return
-      end
-
-      paramPairs = methods[method]
-      if paramPairs.nil?
-        puts "\nUnexpected method #{method} for path #{req.path}\n\n"
-        return
-      end
-
-      actual_params = stringify_keys(req.params)
-      actual_params_array = actual_params.to_a
-
-      paramPairs.each_key do |key|
-        exp_params = stringify_keys(paramPairs[key][:params])
-        next if exp_params.nil?
-        exp_params_array = exp_params.to_a
-        diff = exp_params_array - actual_params_array
-        act_diff = actual_params_array - exp_params_array
-        puts "\n\nServme: #{req.path} [#{method}]\nparams expected diff: #{Hash[diff]}\nparams actual diff: #{Hash[act_diff]}\n\n"
-      end
     end
 
     def stringify_keys(params)
