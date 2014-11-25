@@ -56,6 +56,13 @@ module Servme
       write_hr "Resetting - all stubs deleted"
     end
 
+    def write_hr(title = '', type = :info)
+      char = type == :info ? "-" : "!"
+      spacer = char * ((76 - title.length) / 2)
+      output_file.puts
+      output_file.puts "#{spacer}  #{title}  #{spacer}"
+    end
+
     private
 
     def log_level
@@ -73,13 +80,6 @@ module Servme
 
     def init_session
       write_hr("Session Starting")
-    end
-
-    def write_hr(title = '', type = :info)
-      char = type == :info ? "-" : "!"
-      spacer = char * ((76 - title.length) / 2)
-      output_file.puts
-      output_file.puts "#{spacer}  #{title}  #{spacer}"
     end
 
     def write_line(type, info)

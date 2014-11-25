@@ -26,6 +26,10 @@ module Servme
     Service.clear
   end
 
+  def self.log(message)
+    Logger.instance.write_hr(message)
+  end
+
   def self.paths(show_responses = false)
     if show_responses
       Stubber.instance.stubbings
