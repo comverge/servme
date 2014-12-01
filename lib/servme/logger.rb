@@ -58,7 +58,7 @@ module Servme
 
     def write_hr(title = '', type = :info)
       char = type == :info ? "-" : "!"
-      spacer = char * ((76 - title.length) / 2)
+      spacer = char * ((76 - title.length).abs / 2)
       output_file.puts
       output_file.puts "#{spacer}  #{title}  #{spacer}"
     end
