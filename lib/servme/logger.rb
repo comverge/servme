@@ -51,9 +51,13 @@ module Servme
       write_line "Path", path
     end
 
-    def alert_reset
+    def alert_reset(path=nil)
       return unless level == :info
-      write_hr "Resetting - all stubs deleted"
+      if path 
+        write_hr "Resetting stub for path #{path}"
+      else
+        write_hr "Resetting - all stubs deleted"
+      end
     end
 
     def write_hr(title = '', type = :info)

@@ -10,8 +10,12 @@ module Servme
       clear
     end
 
-    def clear
-      @stubbings = {}
+    def clear(path=nil)
+      if path
+        @stubbings[path] ||= nil
+      else
+        @stubbings = {}
+      end
     end
 
     def stub(config)

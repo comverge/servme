@@ -33,8 +33,8 @@ module Servme
       )
     end
 
-    def self.clear
-      Stubber.instance.clear
+    def self.clear(path=nil)
+      Stubber.instance.clear(path)
     end
   end
 

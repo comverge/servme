@@ -21,9 +21,9 @@ module Servme
     }.merge(options))
   end
 
-  def self.reset
-    Logger.instance.alert_reset
-    Service.clear
+  def self.reset(path=nil)
+    Logger.instance.alert_reset(path)
+    Service.clear(path)
   end
 
   def self.log(message)
